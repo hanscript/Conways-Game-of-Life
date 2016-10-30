@@ -22,12 +22,12 @@ end
 
 local CGoL = class:create("CGoL")
 
-function CGoL:__init(n, m, matrix)
-  self.n = n
-  self.m = m
+function CGoL:__init(matrix)
+  self.n = #matrix
+  self.m = #matrix[1]
   self.l = self.n*self.m
 
-  self.this = matrix
+  self.this = self:flatten(matrix)
   self.next = copy(self.this)
 
   self.depth = 0
@@ -42,9 +42,20 @@ function CGoL:__init(n, m, matrix)
     end
     return 0
   end
-
   self.mt = {__index = f}
   setmetatable(self.this, self.mt)
+end
+
+function CGoL:flatten(a)
+  local b = {}
+  for i, r in pairs(a) do
+  	for j, c in pairs(r) do
+  	  if c == 1 then
+  	  	b[(i-1)*#r+j] = 1
+  	  end
+  	end
+  end
+  return b
 end
 
 function CGoL:move()
@@ -55,20 +66,20 @@ function CGoL:move()
   setmetatable(self.this, self.mt)
 end
 
-function CGoL:count(x0,x1,x2,y0,y1,y2)
-  return self.this[x0+y0]+self.this[x1+y0]+self.this[x2+y0]
-        +self.this[x0+y1]+self.this[x2+y1]
-        +self.this[x0+y2]+self.this[x1+y2]+self.this[x2+y2]
+function CGoL:count(x1,x2,x3,y1,y2,y3)
+  return self.this[x1+y1]+self.this[x2+y1]+self.this[x3+y1]
+        +self.this[x1+y2]        +         self.this[x3+y2]
+        +self.this[x1+y3]+self.this[x2+y3]+self.this[x3+y3]
 end
 
 function CGoL:evaluate(i)
-  local x1 = i%self.m
-  local x0 = (x1 + self.m - 1)%self.m
-  local x2 = (x1 + 1)%self.m
-  local y1 = i - x1
-  local y0 = (y1 + self.l - self.m)%self.l
-  local y2 = (y1 + self.m)%self.l
-  local n = self:count(x0,x1,x2,y0,y1,y2)
+  local x2 = (i - 1)%self.m
+  local x1 = (x2 + self.m - 1)%self.m
+  local x3 = (x2 + 1)%self.m
+  local y2 = i - x2
+  local y1 = (y2 + self.l - self.m)%self.l
+  local y3 = (y2 + self.m)%self.l
+  local n = self:count(x1,x2,x3,y1,y2,y3)
   self.next[i] = (n == 3 or (n == 2 and self.this[i] == 1)) and 1 or nil
 end
 
@@ -78,4 +89,18 @@ function CGoL:nextgen()
     self:evaluate(i)
   end
   self:move()
+end
+
+function CGoL:print()
+  self.depth = 1
+  local s = ""
+  for i = 1, self.n do
+    for j = 1, self.m do
+      s = s..self.this[(i-1)*self.m+j]
+    end
+    s = s.."\n"
+  end
+  self.depth = 0
+  s = s.."----------"
+  print(s)
 end
