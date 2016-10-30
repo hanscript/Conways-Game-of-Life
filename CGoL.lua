@@ -49,11 +49,11 @@ end
 function CGoL:flatten(a)
   local b = {}
   for i, r in pairs(a) do
-  	for j, c in pairs(r) do
-  	  if c == 1 then
-  	  	b[(i-1)*#r+j] = 1
-  	  end
-  	end
+    for j, c in pairs(r) do
+      if c == 1 then
+        b[(i-1)*#r+j] = 1
+      end
+    end
   end
   return b
 end
