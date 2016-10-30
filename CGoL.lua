@@ -1,6 +1,3 @@
---conway's game of life
---sparse, periodic
-
 local class = {}
 function class:create(name)
   self[name] = {}
