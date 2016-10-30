@@ -1,10 +1,14 @@
---[[Conways Game of Life implementation in Lua 5.2
+--[[
+Conways Game of Life implementation in Lua 5.2
 
-Only living cells are saved in memory.
-Dead cells next to living cells are considered, but not saved in memory.
-Isolated dead cells are ignored and not saved in memory.
+Only living cells are saved in memory
+Dead cells next to living cells are considered, but not saved in memory
+Isolated dead cells are ignored and not saved in memory
 
-World is periodic.]]
+World is periodic
+
+Input matrix can contain dead cells for easier input. can be nil'd afterwards
+]]
 
 local matrix = {
   {0,0,1,0,0,0,0},
