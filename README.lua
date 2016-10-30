@@ -6,21 +6,21 @@ Isolated dead cells are ignored and not saved in memory.
 
 World is periodic.]]
 
+local matrix = {
+  {0,0,1,0,0,0,0},
+  {0,0,0,1,0,0,0},
+  {0,1,1,1,0,0,0},
+  {0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0},
+}
 
---EXAMPLE
+local world = CGoL(matrix)
+matrix = nil
 
---10x10 world
-local width = 10
-local height = 10
---2DArray flattened to 1D. index starting at 0
-local config = {[13]=1,[24]=1,[32]=1,[33]=1,[34]=1} --glider
-local world = CGoL(width, height, config)
-for i = 1, 10 do
-  local s = "{"
-  for j, v in pairs(world.this) do
-    s = s.."["..j.."]="..v..","
-  end
-  s = s.."}\n"
-  print(s)
+world:print()
+for i = 1, 25 do
   world:nextgen()
+  world:print()
 end
