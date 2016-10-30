@@ -1,3 +1,6 @@
+--conway's game of life
+--sparse, periodic
+
 local class = {}
 function class:create(name)
   self[name] = {}
@@ -34,13 +37,12 @@ function CGoL:__init(n, m, matrix)
   self.visited = {}
 
   local f = function(t, i)
-    if self.depth == 1 or self.visited[i] then
-      return 0
+    if self.depth == 0 and self.visited[i] == nil then
+      self.depth = 1
+      self.visited[i] = true
+      self:evaluate(i)
+      self.depth = 0
     end
-    self.depth = 1
-    self.visited[i] = true
-    self:evaluate(i)
-    self.depth = 0
     return 0
   end
 
