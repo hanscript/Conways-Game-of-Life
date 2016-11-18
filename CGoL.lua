@@ -1,3 +1,6 @@
+local pairs = pairs
+local setmetatable = setmetatable
+
 local class = {}
 function class:create(name)
   self[name] = {}
@@ -104,3 +107,5 @@ function CGoL:print()
   s = s.."----------"
   print(s)
 end
+
+return CGoL
